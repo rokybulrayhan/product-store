@@ -8,18 +8,18 @@ import (
 	"github.com/uptrace/bun"
 )
 
-type BrandRepo struct {
+type ProductStockRepo struct {
 	db *bun.DB
 }
 
-func NewBrandRepo(db *bun.DB) *BrandRepo {
-	return &BrandRepo{
+func NewProductStockRepo(db *bun.DB) *ProductStockRepo {
+	return &ProductStockRepo{
 		db: db,
 	}
 }
 
-func (repo *BrandRepo) Update(ctx context.Context, Brand *entity.Brand) (int64, error) {
-	res, err := repo.db.NewUpdate().Model(Brand).
+func (repo *ProductStockRepo) Update(ctx context.Context, ProductStock *entity.ProductStock) (int64, error) {
+	res, err := repo.db.NewUpdate().Model(ProductStock).
 		WherePK().
 		ExcludeColumn("created_at", "created_by").
 		Returning("*").
@@ -33,20 +33,20 @@ func (repo *BrandRepo) Update(ctx context.Context, Brand *entity.Brand) (int64, 
 
 // Get single entity by id
 
-func (repo *BrandRepo) GetByID(ctx context.Context, BrandId int) (entity.Brand, error) {
-	entityDB := entity.Brand{}
+func (repo *ProductStockRepo) GetByID(ctx context.Context, ProductStockId int) (entity.ProductStock, error) {
+	entityDB := entity.ProductStock{}
 	err := repo.db.NewSelect().Model(&entityDB).
-		Where("id = ?", BrandId).
+		Where("id = ?", ProductStockId).
 		Scan(ctx)
 	return entityDB, err
 }
 
 // Get All Entity
 
-func (repo *BrandRepo) List(ctx context.Context, pagination entity.Pagination, filter entity.BrandFilter) (int, []entity.Brand, error) {
-	Brand := []entity.Brand{}
+func (repo *ProductStockRepo) List(ctx context.Context, pagination entity.Pagination, filter entity.ProductStockFilter) (int, []entity.ProductStock, error) {
+	ProductStock := []entity.ProductStock{}
 
-	query := repo.db.NewSelect().Model(&Brand)
+	query := repo.db.NewSelect().Model(&ProductStock)
 	if pagination.Limit != 0 {
 		query.Limit(pagination.Limit).
 			Offset(pagination.Offset)
@@ -58,22 +58,22 @@ func (repo *BrandRepo) List(ctx context.Context, pagination entity.Pagination, f
 	if err != nil {
 		return 0, nil, err
 	}
-	return totalCount, Brand, nil
+	return totalCount, ProductStock, nil
 }
 
 // Create entity
 
-func (repo *BrandRepo) Create(ctx context.Context, entity *entity.Brand) error {
+func (repo *ProductStockRepo) Create(ctx context.Context, entity *entity.ProductStock) error {
 	_, err := repo.db.NewInsert().Model(entity).
 		ExcludeColumn("created_at", "updated_at", "deleted_at", "updated_by").
 		Returning("*").Exec(ctx)
 	return err
 }
 
-func (repo *BrandRepo) Delete(ctx context.Context, id int) (int64, error) {
+func (repo *ProductStockRepo) Delete(ctx context.Context, id int) (int64, error) {
 
 	res, err := repo.db.NewUpdate().
-		Model((*entity.Brand)(nil)).
+		Model((*entity.ProductStock)(nil)).
 		Set("deleted_at = NOW()").
 		Where("id = ?", id).
 		Exec(ctx)

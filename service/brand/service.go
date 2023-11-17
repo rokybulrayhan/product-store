@@ -33,6 +33,7 @@ type Repository interface {
 	GetByID(ctx context.Context, BrandId int) (entity.Brand, error)
 	List(ctx context.Context, pagination entity.Pagination, filter entity.BrandFilter) (int, []entity.Brand, error)
 	Create(ctx context.Context, entitys *entity.Brand) error
+	Delete(ctx context.Context, id int) (int64, error)
 }
 
 // Get entity
@@ -95,4 +96,15 @@ func (s *Service) Create(ctx context.Context, data httpentity.CreateBrandRequest
 		return nil, apperror.InteralError.Wrap(err)
 	}
 	return &Brand, nil
+}
+
+func (s *Service) Delete(ctx context.Context, id int) error {
+	affected, err := s.Repository.Delete(ctx, id)
+	if err != nil {
+		return apperror.InteralError.Wrap(err)
+	}
+	if affected == 0 {
+		return apperror.InteralError.Wrap(err)
+	}
+	return nil
 }

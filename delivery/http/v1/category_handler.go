@@ -6,35 +6,35 @@ import (
 
 	"github.com/go-contact-service/entity/httpentity"
 	"github.com/go-contact-service/lib/logger"
-	Brand "github.com/go-contact-service/service/brand"
+	Category "github.com/go-contact-service/service/category"
 
 	"github.com/labstack/echo/v4"
 )
 
-type BrandHandler struct {
-	Services *Brand.Service
+type CategoryHandler struct {
+	Services *Category.Service
 	Logger   logger.Logger
 }
 
-func NewBrandHandler(services *Brand.Service, logger logger.Logger) *BrandHandler {
-	return &BrandHandler{
+func NewCategoryHandler(services *Category.Service, logger logger.Logger) *CategoryHandler {
+	return &CategoryHandler{
 		Services: services,
 		Logger:   logger,
 	}
 }
 
-// Map Brands routes
-func (h BrandHandler) MapBrandRoutes(BrandGroup *echo.Group, authenticated echo.MiddlewareFunc) {
-	BrandGroup.POST("", h.AddBrandHandler)
-	BrandGroup.PUT("/:id", h.UpdateBrandHandler)
-	BrandGroup.GET("/:id", h.GetBrandHandler)
-	BrandGroup.GET("", h.ListBrandHandler)
-	BrandGroup.DELETE("/:id", h.Delete)
+// Map Categorys routes
+func (h CategoryHandler) MapCategoryRoutes(CategoryGroup *echo.Group, authenticated echo.MiddlewareFunc) {
+	CategoryGroup.POST("", h.AddCategoryHandler)
+	CategoryGroup.PUT("/:id", h.UpdateCategoryHandler)
+	CategoryGroup.GET("/:id", h.GetCategoryHandler)
+	CategoryGroup.GET("", h.ListCategoryHandler)
+	CategoryGroup.DELETE("/:id", h.Delete)
 
 }
 
-func (h *BrandHandler) ListBrandHandler(c echo.Context) error {
-	params := httpentity.BrandParams{}
+func (h *CategoryHandler) ListCategoryHandler(c echo.Context) error {
+	params := httpentity.CategoryParams{}
 	err := c.Bind(&params)
 	if err != nil {
 		return handleInvalidDataError(c, err)
@@ -43,14 +43,14 @@ func (h *BrandHandler) ListBrandHandler(c echo.Context) error {
 	return handleApplicationResponse(c, "", res, err)
 }
 
-func (h *BrandHandler) UpdateBrandHandler(c echo.Context) error {
+func (h *CategoryHandler) UpdateCategoryHandler(c echo.Context) error {
 
-	BrandId, err := strconv.Atoi(c.Param("id"))
+	CategoryId, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		return handleApplicationError(c, err)
 	}
-	data := httpentity.UpdateBrandRequest{}
-	data.Id = BrandId
+	data := httpentity.UpdateCategoryRequest{}
+	data.Id = CategoryId
 
 	// Bind JSON to struct
 	err = c.Bind(&data)
@@ -66,18 +66,18 @@ func (h *BrandHandler) UpdateBrandHandler(c echo.Context) error {
 	return handleApplicationResponse(c, "", res, err)
 }
 
-func (h BrandHandler) GetBrandHandler(c echo.Context) error {
+func (h CategoryHandler) GetCategoryHandler(c echo.Context) error {
 
-	BrandId, err := strconv.Atoi(c.Param("id"))
+	CategoryId, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		return handleApplicationError(c, err)
 	}
-	res, err := h.Services.GetByID(c.Request().Context(), BrandId)
+	res, err := h.Services.GetByID(c.Request().Context(), CategoryId)
 	return handleApplicationResponse(c, "", res, err)
 }
 
-func (h BrandHandler) AddBrandHandler(c echo.Context) error {
-	data := httpentity.CreateBrandRequest{}
+func (h CategoryHandler) AddCategoryHandler(c echo.Context) error {
+	data := httpentity.CreateCategoryRequest{}
 	fmt.Println(data)
 
 	err := c.Bind(&data)
@@ -93,7 +93,7 @@ func (h BrandHandler) AddBrandHandler(c echo.Context) error {
 	return handleApplicationResponse(c, "", res, err)
 }
 
-func (h *BrandHandler) Delete(c echo.Context) error {
+func (h *CategoryHandler) Delete(c echo.Context) error {
 	addressIdStr := c.Param("id")
 	addressId, err := strconv.Atoi(addressIdStr)
 	if err != nil {
