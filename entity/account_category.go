@@ -1,0 +1,9 @@
+package entity
+
+const (
+// ACCOUNT_CATEGORY_ADMIN    = 1
+// ACCOUNT_CATEGORY_CS       = 2
+// ACCOUNT_CATEGORY_DRIVER   = 3
+// ACCOUNT_CATEGORY_CUSTOMER = 4
+// ACCOUNT_CATEGORY_BM       = 5
+)

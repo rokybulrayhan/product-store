@@ -1,0 +1,667 @@
+basePath: /api/v1
+definitions:
+  httpentity.CreateContactAddressRequest:
+    properties:
+      address:
+        type: string
+      address_type:
+        type: string
+      city:
+        type: string
+      contact_id:
+        type: string
+      country:
+        type: string
+      email:
+        type: string
+      is_active:
+        type: boolean
+      mobile:
+        type: string
+      telephone:
+        type: string
+      website:
+        type: string
+      zip:
+        type: string
+    required:
+    - address
+    - address_type
+    - city
+    - country
+    - email
+    - mobile
+    - telephone
+    - website
+    - zip
+    type: object
+  httpentity.CreateContactAndAddressRequest:
+    properties:
+      addresses:
+        items:
+          $ref: '#/definitions/httpentity.CreateContactAddressRequest'
+        type: array
+      contact:
+        $ref: '#/definitions/httpentity.CreateContactRequest'
+    type: object
+  httpentity.CreateContactGroupRequest:
+    properties:
+      contact_group_name:
+        type: string
+      contact_type_id:
+        type: integer
+    required:
+    - contact_group_name
+    type: object
+  httpentity.CreateContactRequest:
+    properties:
+      business_name:
+        type: string
+      contact_group_id:
+        type: integer
+      description:
+        type: string
+      first_name:
+        type: string
+      image:
+        type: string
+      is_active:
+        type: boolean
+      job_title:
+        type: string
+      last_name:
+        type: string
+      location_group_id:
+        type: string
+    required:
+    - business_name
+    - contact_group_id
+    - description
+    - first_name
+    - job_title
+    - last_name
+    - location_group_id
+    type: object
+  httpentity.UpdateContactAddressRequest:
+    properties:
+      address:
+        type: string
+      address_type:
+        type: string
+      city:
+        type: string
+      contact_id:
+        type: string
+      contacts_address_id:
+        type: string
+      country:
+        type: string
+      email:
+        type: string
+      is_active:
+        type: boolean
+      mobile:
+        type: string
+      telephone:
+        type: string
+      website:
+        type: string
+      zip:
+        type: string
+    required:
+    - address
+    - address_type
+    - city
+    - country
+    - email
+    - mobile
+    - telephone
+    - website
+    - zip
+    type: object
+  httpentity.UpdateContactAndAddressRequest:
+    properties:
+      addresses:
+        items:
+          $ref: '#/definitions/httpentity.UpdateContactAddressRequest'
+        type: array
+      contact:
+        $ref: '#/definitions/httpentity.UpdateContactRequest'
+    type: object
+  httpentity.UpdateContactGroupRequest:
+    properties:
+      contact_group_id:
+        type: integer
+      contact_group_name:
+        type: string
+      contact_type_id:
+        type: integer
+      is_active:
+        type: boolean
+    required:
+    - contact_group_name
+    type: object
+  httpentity.UpdateContactRequest:
+    properties:
+      business_name:
+        type: string
+      contact_group_id:
+        type: integer
+      contact_id:
+        type: string
+      description:
+        type: string
+      first_name:
+        type: string
+      image:
+        type: string
+      is_active:
+        type: boolean
+      job_title:
+        type: string
+      last_name:
+        type: string
+      location_group_id:
+        type: string
+    required:
+    - business_name
+    - contact_group_id
+    - description
+    - first_name
+    - job_title
+    - last_name
+    - location_group_id
+    type: object
+  httpentity.UpdateContactTypeRequest:
+    properties:
+      contact_type_id:
+        type: integer
+      contact_type_name:
+        type: string
+      is_active:
+        type: boolean
+      is_location_group:
+        type: boolean
+    required:
+    - contact_type_name
+    type: object
+host: localhost:2326
+info:
+  contact: {}
+  description: This is a sample api documentation.
+  title: ERP Contact Service API Documentation.
+  version: "1.0"
+paths:
+  /contacts:
+    get:
+      consumes:
+      - application/json
+      description: Get contact List
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            type: string
+        "400":
+          description: error
+          schema:
+            type: string
+        "404":
+          description: error
+          schema:
+            type: string
+        "500":
+          description: error
+          schema:
+            type: string
+      summary: Get contact List
+      tags:
+      - Contact
+    post:
+      consumes:
+      - application/json
+      description: contact with bulk address
+      parameters:
+      - description: Contact And Address data
+        in: body
+        name: Contact
+        required: true
+        schema:
+          $ref: '#/definitions/httpentity.CreateContactAndAddressRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            type: string
+        "400":
+          description: error
+          schema:
+            type: string
+        "404":
+          description: error
+          schema:
+            type: string
+        "500":
+          description: error
+          schema:
+            type: string
+      summary: Create contact with bulk address
+      tags:
+      - Contact
+  /contacts/{contact_id}/addresses:
+    get:
+      consumes:
+      - application/json
+      description: get contact Address
+      parameters:
+      - description: uuid
+        in: path
+        name: contact_id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: success
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "404":
+          description: Not Found
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Get Contact Address
+      tags:
+      - Contact Address
+    post:
+      consumes:
+      - application/json
+      description: Bulk create contact address
+      parameters:
+      - description: uuid
+        in: path
+        name: contact_id
+        required: true
+        type: string
+      - description: Contact Address data
+        in: body
+        name: ContactAddress
+        required: true
+        schema:
+          items:
+            $ref: '#/definitions/httpentity.CreateContactAddressRequest'
+          type: array
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            type: string
+        "400":
+          description: error
+          schema:
+            type: string
+        "404":
+          description: error
+          schema:
+            type: string
+        "500":
+          description: error
+          schema:
+            type: string
+      summary: Bulk create contact address
+      tags:
+      - Contact Address
+  /contacts/{contact_id}/addresses/{contacts_address_id}:
+    get:
+      consumes:
+      - application/json
+      description: get contact address
+      parameters:
+      - description: uuid
+        in: path
+        name: contact_id
+        required: true
+        type: string
+      - description: uuid
+        in: path
+        name: contacts_address_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            type: string
+        "400":
+          description: error
+          schema:
+            type: string
+        "404":
+          description: error
+          schema:
+            type: string
+        "500":
+          description: error
+          schema:
+            type: string
+      summary: Get contact address by address id
+      tags:
+      - Contact Address
+    put:
+      consumes:
+      - application/json
+      description: update contact address
+      parameters:
+      - description: uuid
+        in: path
+        name: contact_id
+        required: true
+        type: string
+      - description: uuid
+        in: path
+        name: contacts_address_id
+        required: true
+        type: string
+      - description: Contact type data
+        in: body
+        name: ContactAddress
+        required: true
+        schema:
+          $ref: '#/definitions/httpentity.UpdateContactAddressRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            type: string
+        "400":
+          description: error
+          schema:
+            type: string
+        "404":
+          description: error
+          schema:
+            type: string
+        "500":
+          description: error
+          schema:
+            type: string
+      summary: Update contact address
+      tags:
+      - Contact Address
+  /contacts/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Get contact by contact id
+      parameters:
+      - description: UUID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            type: string
+        "400":
+          description: error
+          schema:
+            type: string
+        "404":
+          description: error
+          schema:
+            type: string
+        "500":
+          description: error
+          schema:
+            type: string
+      summary: Get contact by contact id
+      tags:
+      - Contact
+    put:
+      consumes:
+      - application/json
+      description: contact with bulk address
+      parameters:
+      - description: uuid
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Contact And Address data
+        in: body
+        name: Contact
+        required: true
+        schema:
+          $ref: '#/definitions/httpentity.UpdateContactAndAddressRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            type: string
+        "400":
+          description: error
+          schema:
+            type: string
+        "404":
+          description: error
+          schema:
+            type: string
+        "500":
+          description: error
+          schema:
+            type: string
+      summary: Update contact with bulk address
+      tags:
+      - Contact
+  /contacts/groups:
+    get:
+      consumes:
+      - application/json
+      description: get contact group
+      responses:
+        "200":
+          description: success
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "404":
+          description: Not Found
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Get Contact Groups
+      tags:
+      - Contact Group
+    post:
+      consumes:
+      - application/json
+      description: create contact group
+      parameters:
+      - description: Contact group data
+        in: body
+        name: ContactGroup
+        required: true
+        schema:
+          $ref: '#/definitions/httpentity.CreateContactGroupRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            type: string
+        "400":
+          description: error
+          schema:
+            type: string
+        "404":
+          description: error
+          schema:
+            type: string
+        "500":
+          description: error
+          schema:
+            type: string
+      summary: Create contact group
+      tags:
+      - Contact Group
+  /contacts/groups/{contacts_group_id}:
+    get:
+      consumes:
+      - application/json
+      description: get contact group
+      parameters:
+      - description: int
+        in: path
+        name: contacts_group_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            type: string
+        "400":
+          description: error
+          schema:
+            type: string
+        "404":
+          description: error
+          schema:
+            type: string
+        "500":
+          description: error
+          schema:
+            type: string
+      summary: Get contact group
+      tags:
+      - Contact Group
+    put:
+      consumes:
+      - application/json
+      description: update contact group
+      parameters:
+      - description: int
+        in: path
+        name: contacts_group_id
+        required: true
+        type: integer
+      - description: Contact type data
+        in: body
+        name: Contact
+        required: true
+        schema:
+          $ref: '#/definitions/httpentity.UpdateContactRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            type: string
+        "400":
+          description: error
+          schema:
+            type: string
+        "404":
+          description: error
+          schema:
+            type: string
+        "500":
+          description: error
+          schema:
+            type: string
+      summary: Update contact group
+      tags:
+      - Contact Group
+  /contacts/types:
+    get:
+      consumes:
+      - application/json
+      description: get contact types
+      responses:
+        "200":
+          description: success
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "404":
+          description: Not Found
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Get contact types
+      tags:
+      - Contact Type
+    put:
+      consumes:
+      - application/json
+      description: bulk update contact type
+      parameters:
+      - description: Contact type data
+        in: body
+        name: contactType
+        required: true
+        schema:
+          items:
+            $ref: '#/definitions/httpentity.UpdateContactTypeRequest'
+          type: array
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            type: string
+        "400":
+          description: error
+          schema:
+            type: string
+        "404":
+          description: error
+          schema:
+            type: string
+        "500":
+          description: error
+          schema:
+            type: string
+      summary: Bulk update contact type
+      tags:
+      - Contact Type
+swagger: "2.0"
