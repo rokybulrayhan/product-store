@@ -47,6 +47,10 @@ func (repo *CategoryRepo) List(ctx context.Context, pagination entity.Pagination
 	Category := []entity.Category{}
 
 	query := repo.db.NewSelect().Model(&Category)
+
+	if filter.StatusId != nil {
+		query.Where("status_id = ?", filter.StatusId)
+	}
 	if pagination.Limit != 0 {
 		query.Limit(pagination.Limit).
 			Offset(pagination.Offset)
@@ -65,7 +69,7 @@ func (repo *CategoryRepo) List(ctx context.Context, pagination entity.Pagination
 
 func (repo *CategoryRepo) Create(ctx context.Context, entity *entity.Category) error {
 	_, err := repo.db.NewInsert().Model(entity).
-		ExcludeColumn("created_at", "updated_at", "deleted_at", "updated_by").
+		ExcludeColumn("created_at", "updated_at", "deleted_at", "updated_by", "status_id").
 		Returning("*").Exec(ctx)
 	return err
 }

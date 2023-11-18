@@ -47,6 +47,7 @@ func (repo *ProductStockRepo) List(ctx context.Context, pagination entity.Pagina
 	ProductStock := []entity.ProductStock{}
 
 	query := repo.db.NewSelect().Model(&ProductStock)
+
 	if pagination.Limit != 0 {
 		query.Limit(pagination.Limit).
 			Offset(pagination.Offset)

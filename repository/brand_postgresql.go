@@ -47,12 +47,14 @@ func (repo *BrandRepo) List(ctx context.Context, pagination entity.Pagination, f
 	Brand := []entity.Brand{}
 
 	query := repo.db.NewSelect().Model(&Brand)
+
+	if filter.StatusId != nil {
+		query.Where("status_id = ?", filter.StatusId)
+	}
 	if pagination.Limit != 0 {
 		query.Limit(pagination.Limit).
 			Offset(pagination.Offset)
 	}
-
-	//query.Where("contact_id = ?", filter.ContactID)
 
 	totalCount, err := query.ScanAndCount(ctx)
 	if err != nil {
@@ -65,7 +67,7 @@ func (repo *BrandRepo) List(ctx context.Context, pagination entity.Pagination, f
 
 func (repo *BrandRepo) Create(ctx context.Context, entity *entity.Brand) error {
 	_, err := repo.db.NewInsert().Model(entity).
-		ExcludeColumn("created_at", "updated_at", "deleted_at", "updated_by").
+		ExcludeColumn("created_at", "updated_at", "deleted_at", "updated_by", "status_id").
 		Returning("*").Exec(ctx)
 	return err
 }

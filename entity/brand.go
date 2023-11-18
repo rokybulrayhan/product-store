@@ -19,4 +19,5 @@ type Brand struct {
 	UpdatedBy string       `json:"updated_by" bun:"updated_by,nullzero"`
 }
 type BrandFilter struct {
+	StatusId *bool
 }

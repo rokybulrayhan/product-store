@@ -41,6 +41,18 @@ func (s *Service) List(ctx context.Context, params httpentity.BrandParams) (*htt
 	pagination := params.PaginationRequest.GetLimitOffset()
 	dbFilter := entity.BrandFilter{}
 
+	if params.StatusId != 0 {
+		var active bool
+		if params.StatusId == 1 {
+			active = true
+		}
+		if params.StatusId == 2 {
+			active = false
+		}
+		dbFilter.StatusId = &active
+
+	}
+
 	total, Brand, err := s.Repository.List(ctx, pagination, dbFilter)
 	if err != nil {
 		return &httpentity.BrandList{}, apperror.InteralError.Wrap(err)

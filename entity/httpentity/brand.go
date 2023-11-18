@@ -27,5 +27,6 @@ type BrandList struct {
 }
 
 type BrandParams struct {
+	StatusId int `query:"status_id"`
 	PaginationRequest
 }

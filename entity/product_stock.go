@@ -19,4 +19,5 @@ type ProductStock struct {
 	UpdatedBy string       `json:"updated_by" bun:"updated_by,nullzero"`
 }
 type ProductStockFilter struct {
+	StatusId *bool
 }

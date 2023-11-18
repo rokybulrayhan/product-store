@@ -4,8 +4,8 @@ import "github.com/go-contact-service/entity"
 
 type CreateCategoryRequest struct {
 	Id       int    `json:"id" bun:"id,pk,autoincrement"`
-	Name     string `json:"name" validate:"name"`
-	ParentId string `json:"parent_id" validate:"parent_id"`
+	Name     string `json:"name" validate:"required"`
+	ParentId int    `json:"parent_id" validate:"required"`
 }
 
 func (input *CreateCategoryRequest) Validate() []FieldError {
@@ -28,5 +28,6 @@ type CategoryList struct {
 }
 
 type CategoryParams struct {
+	StatusId int `query:"status_id"`
 	PaginationRequest
 }

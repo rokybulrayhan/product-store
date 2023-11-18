@@ -54,7 +54,7 @@ CREATE TABLE products (
 	supplier_id INT NULL,
 	unit_price INT NULL,
 	discount_price INT NULL,
-	tages text NULL,
+	tags text NULL,
 	status_id bool NULL DEFAULT true,
 
     created_at timestamp NOT NULL DEFAULT (CURRENT_TIMESTAMP AT TIME ZONE 'UTC'::text),

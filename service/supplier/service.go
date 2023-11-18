@@ -40,6 +40,17 @@ type Repository interface {
 func (s *Service) List(ctx context.Context, params httpentity.SupplierParams) (*httpentity.SupplierList, error) {
 	pagination := params.PaginationRequest.GetLimitOffset()
 	dbFilter := entity.SupplierFilter{}
+	if params.StatusId != 0 {
+		var active bool
+		if params.StatusId == 1 {
+			active = true
+		}
+		if params.StatusId == 2 {
+			active = false
+		}
+		dbFilter.StatusId = &active
+
+	}
 
 	total, Supplier, err := s.Repository.List(ctx, pagination, dbFilter)
 	if err != nil {

@@ -41,6 +41,18 @@ func (s *Service) List(ctx context.Context, params httpentity.CategoryParams) (*
 	pagination := params.PaginationRequest.GetLimitOffset()
 	dbFilter := entity.CategoryFilter{}
 
+	if params.StatusId != 0 {
+		var active bool
+		if params.StatusId == 1 {
+			active = true
+		}
+		if params.StatusId == 2 {
+			active = false
+		}
+		dbFilter.StatusId = &active
+
+	}
+
 	total, Category, err := s.Repository.List(ctx, pagination, dbFilter)
 	if err != nil {
 		return &httpentity.CategoryList{}, apperror.InteralError.Wrap(err)

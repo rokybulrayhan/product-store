@@ -7,16 +7,16 @@ import (
 )
 
 type Product struct {
-	bun.BaseModel  `bun:"Products"`
+	bun.BaseModel  `bun:"products"`
 	Id             int    `json:"id" bun:"id,pk,autoincrement"`
 	Name           string `json:"name" bun:"name"`
 	Description    string `json:"description" bun:"description"`
 	Specifications string `json:"specifications" bun:"specifications"`
-	BrandId        string `json:"brand_id" bun:"brand_id"`
-	CategoryId     string `json:"category_id" bun:"category_id"`
-	SupplierId     string `json:"supplier_id" bun:"supplier_id"`
-	UnitPrice      string `json:"unit_price" bun:"unit_price"`
-	DiscountPrice  string `json:"discount_price" bun:"discount_price"`
+	BrandId        int    `json:"brand_id" bun:"brand_id"`
+	CategoryId     int    `json:"category_id" bun:"category_id"`
+	SupplierId     int    `json:"supplier_id" bun:"supplier_id"`
+	UnitPrice      int    `json:"unit_price" bun:"unit_price"`
+	DiscountPrice  int    `json:"discount_price" bun:"discount_price"`
 	Tags           string `json:"tags" bun:"tags"`
 	StatusId       bool   `json:"status_id" bun:"status_id"`
 
@@ -27,4 +27,11 @@ type Product struct {
 	UpdatedBy string       `json:"updated_by" bun:"updated_by,nullzero"`
 }
 type ProductFilter struct {
+	Name       string
+	MinPrice   int
+	MaxPrice   int
+	BrandId    int
+	CategoryId int
+	SupplierId int
+	StatusId   *bool
 }

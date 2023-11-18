@@ -4,10 +4,9 @@ import "github.com/go-contact-service/entity"
 
 type CreateSupplierRequest struct {
 	Name               string `json:"name" validate:"required"`
-	Email              string `json:"email" validate:"email"`
-	Phone              string `json:"phone" validate:"phone"`
-	StatusId           bool   `json:"status_id" validate:"status_id"`
-	IsVerifiedSupplier bool   `json:"is_verified_supplier" validate:"is_verified_supplier"`
+	Email              string `json:"email" validate:"required"`
+	Phone              string `json:"phone" validate:"required"`
+	IsVerifiedSupplier bool   `json:"is_verified_supplier" validate:"required"`
 }
 
 func (input *CreateSupplierRequest) Validate() []FieldError {
@@ -30,5 +29,6 @@ type SupplierList struct {
 }
 
 type SupplierParams struct {
+	StatusId int `query:"status_id"`
 	PaginationRequest
 }

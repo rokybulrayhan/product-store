@@ -3,15 +3,15 @@ package httpentity
 import "github.com/go-contact-service/entity"
 
 type CreateProductRequest struct {
-	Name           string `json:"name" validate:"name"`
-	Description    string `json:"description" validate:"description"`
-	Specifications string `json:"specifications" validate:"specifications"`
-	BrandId        string `json:"brand_id" validate:"brand_id"`
-	CategoryId     string `json:"category_id" validate:"category_id"`
-	SupplierId     string `json:"supplier_id" validate:"supplier_id"`
-	UnitPrice      string `json:"unit_price" validate:"unit_price"`
-	DiscountPrice  string `json:"discount_price" validate:"discount_price"`
-	Tags           string `json:"tags" validate:"tags"`
+	Name           string `json:"name" validate:"required"`
+	Description    string `json:"description" `
+	Specifications string `json:"specifications"`
+	BrandId        int    `json:"brand_id" validate:"required"`
+	CategoryId     int    `json:"category_id" validate:"required"`
+	SupplierId     int    `json:"supplier_id" validate:"required"`
+	UnitPrice      int    `json:"unit_price" validate:"required"`
+	DiscountPrice  int    `json:"discount_price" validate:"required"`
+	Tags           string `json:"tags" validate:"required"`
 }
 
 func (input *CreateProductRequest) Validate() []FieldError {
@@ -34,5 +34,12 @@ type ProductList struct {
 }
 
 type ProductParams struct {
+	Name       string `query:"name"`
+	MinPrice   int    `query:"min_price"`
+	MaxPrice   int    `query:"max_price"`
+	BrandId    int    `query:"brand_id"`
+	CategoryId int    `query:"category_id"`
+	SupplierId int    `query:"supplier_id"`
+	StatusId   int    `query:"status_id"`
 	PaginationRequest
 }

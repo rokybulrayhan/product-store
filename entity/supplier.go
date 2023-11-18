@@ -22,4 +22,5 @@ type Supplier struct {
 	UpdatedBy string       `json:"updated_by" bun:"updated_by,nullzero"`
 }
 type SupplierFilter struct {
+	StatusId *bool
 }
