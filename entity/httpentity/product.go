@@ -37,7 +37,7 @@ type ProductParams struct {
 	Name       string `query:"name"`
 	MinPrice   int    `query:"min_price"`
 	MaxPrice   int    `query:"max_price"`
-	BrandId    int    `query:"brand_id"`
+	BrandId    string `query:"brand_id"`
 	CategoryId int    `query:"category_id"`
 	SupplierId int    `query:"supplier_id"`
 	StatusId   int    `query:"status_id"`

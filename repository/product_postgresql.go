@@ -2,6 +2,7 @@ package repository
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/go-contact-service/entity"
 
@@ -48,8 +49,32 @@ func (repo *ProductRepo) List(ctx context.Context, pagination entity.Pagination,
 
 	query := repo.db.NewSelect().Model(&Product)
 
+	if filter.MaxPrice != 0 {
+		query.Where("unit_price >= ?", filter.MaxPrice)
+	}
+	if filter.MinPrice != 0 {
+		query.Where("unit_price <= ?", filter.MinPrice)
+	}
+
 	if filter.StatusId != nil {
 		query.Where("status_id = ?", filter.StatusId)
+	}
+
+	if filter.Name != "" {
+		query.Where("name LIKE ?", fmt.Sprintf("%%%s%%", filter.Name))
+	}
+
+	if filter.CategoryId != 0 {
+		query.Where("category_id = ?", filter.CategoryId)
+	}
+
+	if filter.SupplierId != 0 {
+		query.Where("supplier_id = ?", filter.SupplierId)
+	}
+
+	if len(filter.BrandId) != 0 {
+		query.Where("brand_id IN (?)", bun.In(filter.BrandId))
+
 	}
 
 	if pagination.Limit != 0 {

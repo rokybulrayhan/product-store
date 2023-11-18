@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"net/http"
+	"strings"
 
 	"github.com/go-contact-service/entity"
 	"github.com/go-contact-service/entity/apperror"
@@ -52,6 +53,12 @@ func (s *Service) List(ctx context.Context, params httpentity.ProductParams) (*h
 		dbFilter.StatusId = &active
 
 	}
+	dbFilter.Name = params.Name
+	dbFilter.MinPrice = params.MinPrice
+	dbFilter.MaxPrice = params.MaxPrice
+	dbFilter.CategoryId = params.CategoryId
+	dbFilter.BrandId = strings.Split(params.BrandId, ",")
+	dbFilter.SupplierId = params.SupplierId
 
 	total, Product, err := s.Repository.List(ctx, pagination, dbFilter)
 	if err != nil {

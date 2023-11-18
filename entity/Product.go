@@ -30,7 +30,7 @@ type ProductFilter struct {
 	Name       string
 	MinPrice   int
 	MaxPrice   int
-	BrandId    int
+	BrandId    []string
 	CategoryId int
 	SupplierId int
 	StatusId   *bool
