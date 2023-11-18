@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/go-contact-service/entity"
+	"github.com/techno/entity"
 
 	"github.com/uptrace/bun"
 )
@@ -82,8 +82,7 @@ func (repo *ProductRepo) List(ctx context.Context, pagination entity.Pagination,
 			Offset(pagination.Offset)
 	}
 
-	//query.Where("contact_id = ?", filter.ContactID)
-
+	query.Order("unit_price ASC")
 	totalCount, err := query.ScanAndCount(ctx)
 	if err != nil {
 		return 0, nil, err
@@ -93,8 +92,16 @@ func (repo *ProductRepo) List(ctx context.Context, pagination entity.Pagination,
 
 // Create entity
 
-func (repo *ProductRepo) Create(ctx context.Context, entity *entity.Product) error {
-	_, err := repo.db.NewInsert().Model(entity).
+func (repo *ProductRepo) Create(ctx context.Context, entity *entity.Product, tx *bun.Tx) error {
+
+	var query *bun.InsertQuery
+
+	if tx != nil {
+		query = tx.NewInsert()
+	} else {
+		query = repo.db.NewInsert()
+	}
+	_, err := query.Model(entity).
 		ExcludeColumn("created_at", "updated_at", "deleted_at", "updated_by", "status_id").
 		Returning("*").Exec(ctx)
 	return err
@@ -113,4 +120,8 @@ func (repo *ProductRepo) Delete(ctx context.Context, id int) (int64, error) {
 	affected, _ := res.RowsAffected()
 
 	return affected, nil
+}
+func (repo *ProductRepo) GetTx(ctx context.Context) (*bun.Tx, error) {
+	tx, err := repo.db.BeginTx(ctx, nil)
+	return &tx, err
 }

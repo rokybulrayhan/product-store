@@ -4,17 +4,17 @@ import (
 	"net/http"
 
 	"github.com/aws/aws-sdk-go/aws/session"
-	"github.com/go-contact-service/config"
-	"github.com/go-contact-service/entity"
-	"github.com/go-contact-service/lib"
-	"github.com/go-contact-service/lib/logger"
-	"github.com/go-contact-service/repository"
+	"github.com/techno/config"
+	"github.com/techno/entity"
+	"github.com/techno/lib"
+	"github.com/techno/lib/logger"
+	"github.com/techno/repository"
 
-	brandService "github.com/go-contact-service/service/brand"
-	categoryService "github.com/go-contact-service/service/category"
-	productService "github.com/go-contact-service/service/product"
-	productStockService "github.com/go-contact-service/service/productstock"
-	supplierService "github.com/go-contact-service/service/supplier"
+	brandService "github.com/techno/service/brand"
+	categoryService "github.com/techno/service/category"
+	productService "github.com/techno/service/product"
+	productStockService "github.com/techno/service/productstock"
+	supplierService "github.com/techno/service/supplier"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -28,13 +28,13 @@ func SetupRouters(c *echo.Echo, conf *config.Config, db *bun.DB, jwtConfig middl
 	brandSV := brandService.NewService(brandRepo, logger)
 	brandHandler := NewBrandHandler(brandSV, logger)
 
-	productRepo := repository.NewProductRepo(db)
-	productSV := productService.NewService(productRepo, logger)
-	productHandler := NewProductHandler(productSV, logger)
-
 	productStockRepo := repository.NewProductStockRepo(db)
 	productStockSV := productStockService.NewService(productStockRepo, logger)
 	productStockHandler := NewProductStockHandler(productStockSV, logger)
+
+	productRepo := repository.NewProductRepo(db)
+	productSV := productService.NewService(productRepo, logger, *productStockSV)
+	productHandler := NewProductHandler(productSV, logger)
 
 	categoryRepo := repository.NewCategoryRepo(db)
 	categorySV := categoryService.NewService(categoryRepo, logger)

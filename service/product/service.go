@@ -6,26 +6,32 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/go-contact-service/entity"
-	"github.com/go-contact-service/entity/apperror"
-	"github.com/go-contact-service/entity/httpentity"
-	"github.com/go-contact-service/lib/logger"
+	"github.com/techno/entity"
+	"github.com/techno/entity/apperror"
+	"github.com/techno/entity/httpentity"
+	"github.com/techno/lib/logger"
+	"github.com/uptrace/bun"
+
+	productStockService "github.com/techno/service/productstock"
 )
 
 var (
-	DuplicateProductName = apperror.New(http.StatusBadRequest, "duplicate.Product.name", "contact group already exists. Please choose a different contact group name.")
-	ProductNotFound      = apperror.New(http.StatusNotFound, "Product.not.found", "contact group not found.")
+	DuplicateProductName = apperror.New(http.StatusBadRequest, "duplicate.Product.name", "already exists. Please choose a different name.")
+	ProductNotFound      = apperror.New(http.StatusNotFound, "Product.not.found", "not found.")
+	QuantityError        = apperror.New(http.StatusNotFound, "please update your quantity", "please update your quantity")
 )
 
 type Service struct {
-	Repository Repository
-	Logger     logger.Logger
+	Repository          Repository
+	ProductStockService productStockService.Service
+	Logger              logger.Logger
 }
 
-func NewService(repository Repository, logger logger.Logger) *Service {
+func NewService(repository Repository, logger logger.Logger, productStockService productStockService.Service) *Service {
 	return &Service{
-		Repository: repository,
-		Logger:     logger,
+		Repository:          repository,
+		ProductStockService: productStockService,
+		Logger:              logger,
 	}
 }
 
@@ -33,8 +39,9 @@ type Repository interface {
 	Update(ctx context.Context, entityRef *entity.Product) (int64, error)
 	GetByID(ctx context.Context, ProductId int) (entity.Product, error)
 	List(ctx context.Context, pagination entity.Pagination, filter entity.ProductFilter) (int, []entity.Product, error)
-	Create(ctx context.Context, entitys *entity.Product) error
+	Create(ctx context.Context, entitys *entity.Product, tx *bun.Tx) error
 	Delete(ctx context.Context, id int) (int64, error)
+	GetTx(ctx context.Context) (*bun.Tx, error)
 }
 
 // Get entity
@@ -57,7 +64,10 @@ func (s *Service) List(ctx context.Context, params httpentity.ProductParams) (*h
 	dbFilter.MinPrice = params.MinPrice
 	dbFilter.MaxPrice = params.MaxPrice
 	dbFilter.CategoryId = params.CategoryId
-	dbFilter.BrandId = strings.Split(params.BrandId, ",")
+	if params.BrandId != "" {
+		dbFilter.BrandId = strings.Split(params.BrandId, ",")
+	}
+
 	dbFilter.SupplierId = params.SupplierId
 
 	total, Product, err := s.Repository.List(ctx, pagination, dbFilter)
@@ -109,6 +119,13 @@ func (s *Service) GetByID(ctx context.Context, ProductId int) (entity.Product, e
 
 // Create entity Bulk
 func (s *Service) Create(ctx context.Context, data httpentity.CreateProductRequest) (*entity.Product, error) {
+
+	tx, err := s.Repository.GetTx(ctx)
+	if err != nil {
+		return nil, apperror.InteralError.Wrap(err)
+	}
+	defer tx.Rollback()
+
 	Product := entity.Product{}
 
 	Product = entity.Product{
@@ -123,12 +140,33 @@ func (s *Service) Create(ctx context.Context, data httpentity.CreateProductReque
 		Tags:           data.Tags,
 	}
 
-	err := s.Repository.Create(ctx, &Product)
+	err = s.Repository.Create(ctx, &Product, tx)
 
 	if err != nil {
 
 		return nil, apperror.InteralError.Wrap(err)
 	}
+
+	//need transaction
+
+	if data.ProductStock.StockQuantity <= 0 {
+		return nil, QuantityError
+
+	}
+	err = s.ProductStockService.Repository.Create(ctx, &entity.ProductStock{
+		ProductId:     Product.Id,
+		StockQuantity: data.ProductStock.StockQuantity,
+	}, tx)
+
+	if err != nil {
+		return nil, apperror.InteralError.Wrap(err)
+	}
+
+	err = tx.Commit()
+	if err != nil {
+		return nil, apperror.InteralError.Wrap(err)
+	}
+
 	return &Product, nil
 }
 

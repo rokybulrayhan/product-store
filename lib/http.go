@@ -1,9 +1,9 @@
 package lib
 
 import (
-	"github.com/go-contact-service/lib/httpErrors"
-	"github.com/go-contact-service/lib/logger"
 	"github.com/labstack/echo/v4"
+	"github.com/techno/lib/httpErrors"
+	"github.com/techno/lib/logger"
 )
 
 // Get request id from echo context

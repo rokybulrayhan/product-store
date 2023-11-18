@@ -3,7 +3,7 @@ package repository
 import (
 	"context"
 
-	"github.com/go-contact-service/entity"
+	"github.com/techno/entity"
 
 	"github.com/uptrace/bun"
 )

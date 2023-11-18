@@ -5,15 +5,16 @@ import (
 	"database/sql"
 	"net/http"
 
-	"github.com/go-contact-service/entity"
-	"github.com/go-contact-service/entity/apperror"
-	"github.com/go-contact-service/entity/httpentity"
-	"github.com/go-contact-service/lib/logger"
+	"github.com/techno/entity"
+	"github.com/techno/entity/apperror"
+	"github.com/techno/entity/httpentity"
+	"github.com/techno/lib/logger"
+	"github.com/uptrace/bun"
 )
 
 var (
-	DuplicateProductStockName = apperror.New(http.StatusBadRequest, "duplicate.ProductStock.name", "contact group already exists. Please choose a different contact group name.")
-	ProductStockNotFound      = apperror.New(http.StatusNotFound, "ProductStock.not.found", "contact group not found.")
+	DuplicateProductStockName = apperror.New(http.StatusBadRequest, "duplicate.ProductStock.name", "already exists. Please choose a different name.")
+	ProductStockNotFound      = apperror.New(http.StatusNotFound, "ProductStock.not.found", "not found.")
 )
 
 type Service struct {
@@ -32,7 +33,7 @@ type Repository interface {
 	Update(ctx context.Context, entityRef *entity.ProductStock) (int64, error)
 	GetByID(ctx context.Context, ProductStockId int) (entity.ProductStock, error)
 	List(ctx context.Context, pagination entity.Pagination, filter entity.ProductStockFilter) (int, []entity.ProductStock, error)
-	Create(ctx context.Context, entitys *entity.ProductStock) error
+	Create(ctx context.Context, entitys *entity.ProductStock, tx *bun.Tx) error
 	Delete(ctx context.Context, id int) (int64, error)
 }
 
@@ -101,7 +102,7 @@ func (s *Service) Create(ctx context.Context, data httpentity.CreateProductStock
 		StockQuantity: data.StockQuantity,
 	}
 
-	err := s.Repository.Create(ctx, &ProductStock)
+	err := s.Repository.Create(ctx, &ProductStock, nil)
 
 	if err != nil {
 

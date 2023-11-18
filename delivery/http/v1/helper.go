@@ -4,12 +4,12 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/go-contact-service/entity"
-	"github.com/go-contact-service/entity/apperror"
-	"github.com/go-contact-service/entity/httpentity"
 	"github.com/golang-jwt/jwt"
 	"github.com/labstack/echo/v4"
 	"github.com/mailru/easyjson"
+	"github.com/techno/entity"
+	"github.com/techno/entity/apperror"
+	"github.com/techno/entity/httpentity"
 )
 
 func sessionData(c echo.Context) *entity.JwtClaim {

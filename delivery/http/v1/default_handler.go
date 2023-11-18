@@ -3,7 +3,7 @@ package v1
 import (
 	"net/http"
 
-	"github.com/go-contact-service/config"
+	"github.com/techno/config"
 
 	"github.com/labstack/echo/v4"
 )

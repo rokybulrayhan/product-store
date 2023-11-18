@@ -158,7 +158,7 @@ const docTemplate = `{
                 "summary": "Create contact group",
                 "parameters": [
                     {
-                        "description": "Contact group data",
+                        "description": "data",
                         "name": "ContactGroup",
                         "in": "body",
                         "required": true,

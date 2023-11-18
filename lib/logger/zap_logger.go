@@ -3,7 +3,7 @@ package logger
 import (
 	"os"
 
-	"github.com/go-contact-service/config"
+	"github.com/techno/config"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 )

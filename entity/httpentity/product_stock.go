@@ -1,9 +1,9 @@
 package httpentity
 
-import "github.com/go-contact-service/entity"
+import "github.com/techno/entity"
 
 type CreateProductStockRequest struct {
-	ProductId     int `json:"product_id" validate:"required"`
+	ProductId     int `json:"product_id"`
 	StockQuantity int `json:"stock_quantity" validate:"required"`
 }
 

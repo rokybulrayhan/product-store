@@ -6,7 +6,7 @@ import (
 	"log"
 	"net/url"
 
-	"github.com/go-contact-service/config"
+	"github.com/techno/config"
 	"github.com/uptrace/bun"
 	"github.com/uptrace/bun/dialect/pgdialect"
 	"github.com/uptrace/bun/driver/pgdriver"

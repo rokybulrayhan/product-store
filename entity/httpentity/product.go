@@ -1,17 +1,18 @@
 package httpentity
 
-import "github.com/go-contact-service/entity"
+import "github.com/techno/entity"
 
 type CreateProductRequest struct {
-	Name           string `json:"name" validate:"required"`
-	Description    string `json:"description" `
-	Specifications string `json:"specifications"`
-	BrandId        int    `json:"brand_id" validate:"required"`
-	CategoryId     int    `json:"category_id" validate:"required"`
-	SupplierId     int    `json:"supplier_id" validate:"required"`
-	UnitPrice      int    `json:"unit_price" validate:"required"`
-	DiscountPrice  int    `json:"discount_price" validate:"required"`
-	Tags           string `json:"tags" validate:"required"`
+	Name           string                    `json:"name" validate:"required"`
+	Description    string                    `json:"description" `
+	Specifications string                    `json:"specifications"`
+	BrandId        int                       `json:"brand_id" validate:"required"`
+	CategoryId     int                       `json:"category_id" validate:"required"`
+	SupplierId     int                       `json:"supplier_id" validate:"required"`
+	UnitPrice      int                       `json:"unit_price" validate:"required"`
+	DiscountPrice  int                       `json:"discount_price" validate:"required"`
+	Tags           string                    `json:"tags" validate:"required"`
+	ProductStock   CreateProductStockRequest `json:"product_stock"`
 }
 
 func (input *CreateProductRequest) Validate() []FieldError {

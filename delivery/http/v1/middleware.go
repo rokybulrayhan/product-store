@@ -4,10 +4,10 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/go-contact-service/entity"
-	"github.com/go-contact-service/entity/httpentity"
 	"github.com/golang-jwt/jwt"
 	"github.com/labstack/echo/v4"
+	"github.com/techno/entity"
+	"github.com/techno/entity/httpentity"
 	"golang.org/x/exp/slices"
 )
 

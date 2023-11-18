@@ -1,6 +1,6 @@
 package httpentity
 
-import "github.com/go-contact-service/entity"
+import "github.com/techno/entity"
 
 type CreateSupplierRequest struct {
 	Name               string `json:"name" validate:"required"`

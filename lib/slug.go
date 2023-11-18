@@ -4,8 +4,8 @@ import (
 	"context"
 	"strconv"
 
-	"github.com/go-contact-service/entity"
 	"github.com/gosimple/slug"
+	"github.com/techno/entity"
 )
 
 type slugRepository interface {

@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/go-contact-service/entity/httpentity"
-	"github.com/go-contact-service/lib/logger"
-	Product "github.com/go-contact-service/service/product"
+	"github.com/techno/entity/httpentity"
+	"github.com/techno/lib/logger"
+	Product "github.com/techno/service/product"
 
 	"github.com/labstack/echo/v4"
 )

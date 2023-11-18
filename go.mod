@@ -1,4 +1,4 @@
-module github.com/go-contact-service
+module github.com/techno
 
 go 1.18
 

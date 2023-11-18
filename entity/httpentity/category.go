@@ -1,6 +1,6 @@
 package httpentity
 
-import "github.com/go-contact-service/entity"
+import "github.com/techno/entity"
 
 type CreateCategoryRequest struct {
 	Id       int    `json:"id" bun:"id,pk,autoincrement"`

@@ -505,7 +505,7 @@ paths:
       - application/json
       description: create contact group
       parameters:
-      - description: Contact group data
+      - description: data
         in: body
         name: ContactGroup
         required: true

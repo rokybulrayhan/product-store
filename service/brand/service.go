@@ -5,15 +5,15 @@ import (
 	"database/sql"
 	"net/http"
 
-	"github.com/go-contact-service/entity"
-	"github.com/go-contact-service/entity/apperror"
-	"github.com/go-contact-service/entity/httpentity"
-	"github.com/go-contact-service/lib/logger"
+	"github.com/techno/entity"
+	"github.com/techno/entity/apperror"
+	"github.com/techno/entity/httpentity"
+	"github.com/techno/lib/logger"
 )
 
 var (
-	DuplicateBrandName = apperror.New(http.StatusBadRequest, "duplicate.Brand.name", "contact group already exists. Please choose a different contact group name.")
-	BrandNotFound      = apperror.New(http.StatusNotFound, "Brand.not.found", "contact group not found.")
+	DuplicateBrandName = apperror.New(http.StatusBadRequest, "duplicate.Brand.name", "already exists. Please choose a different name.")
+	BrandNotFound      = apperror.New(http.StatusNotFound, "Brand.not.found", "not found.")
 )
 
 type Service struct {

@@ -3,7 +3,7 @@ package repository
 import (
 	"context"
 
-	"github.com/go-contact-service/entity"
+	"github.com/techno/entity"
 
 	"github.com/uptrace/bun"
 )
@@ -64,8 +64,17 @@ func (repo *ProductStockRepo) List(ctx context.Context, pagination entity.Pagina
 
 // Create entity
 
-func (repo *ProductStockRepo) Create(ctx context.Context, entity *entity.ProductStock) error {
-	_, err := repo.db.NewInsert().Model(entity).
+func (repo *ProductStockRepo) Create(ctx context.Context, entity *entity.ProductStock, tx *bun.Tx) error {
+
+	var query *bun.InsertQuery
+
+	if tx != nil {
+		query = tx.NewInsert()
+	} else {
+		query = repo.db.NewInsert()
+	}
+
+	_, err := query.NewInsert().Model(entity).
 		ExcludeColumn("created_at", "updated_at", "deleted_at", "updated_by").
 		Returning("*").Exec(ctx)
 	return err
@@ -84,4 +93,9 @@ func (repo *ProductStockRepo) Delete(ctx context.Context, id int) (int64, error)
 	affected, _ := res.RowsAffected()
 
 	return affected, nil
+}
+
+func (repo *ProductStockRepo) GetTx(ctx context.Context) (*bun.Tx, error) {
+	tx, err := repo.db.BeginTx(ctx, nil)
+	return &tx, err
 }

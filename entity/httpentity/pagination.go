@@ -1,6 +1,6 @@
 package httpentity
 
-import "github.com/go-contact-service/entity"
+import "github.com/techno/entity"
 
 const DEFAULT_LIMIT = 10
 
