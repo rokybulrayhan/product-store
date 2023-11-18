@@ -8,7 +8,8 @@ CREATE TABLE brands (
 	deleted_at timestamp NULL,
 	created_by uuid NULL,
 	updated_by uuid NULL,
-	CONSTRAINT brands_pkey PRIMARY KEY (id)
+	CONSTRAINT brands_pkey PRIMARY KEY (id),
+	UNIQUE (name)
 );
 
 CREATE TABLE categories (
@@ -24,7 +25,8 @@ CREATE TABLE categories (
 	created_by uuid NULL,
 	updated_by uuid NULL,
 
-	CONSTRAINT categories_pkey PRIMARY KEY (id)
+	CONSTRAINT categories_pkey PRIMARY KEY (id),
+	UNIQUE (name)
 );
 
 CREATE TABLE suppliers (
@@ -65,7 +67,8 @@ CREATE TABLE products (
 
 	CONSTRAINT products_pkey PRIMARY KEY (id),
 	CONSTRAINT brands_fk FOREIGN KEY (brand_id) REFERENCES public.brands(id),
-	CONSTRAINT categories_fk FOREIGN KEY (category_id) REFERENCES public.categories(id)
+	CONSTRAINT categories_fk FOREIGN KEY (category_id) REFERENCES public.categories(id),
+	UNIQUE (name)
 	
 );
 
