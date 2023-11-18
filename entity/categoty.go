@@ -8,12 +8,13 @@ import (
 
 type Category struct {
 	bun.BaseModel `bun:"categories"`
-	Id            int       `json:"id" bun:"id,pk,autoincrement"`
-	Name          string    `json:"name" bun:"name"`
-	ParentId      int       `json:"parent_id" bun:"parent_id"`
-	StatusId      bool      `json:"status_id" bun:"status_id"`
-	Sequence      int       `json:"sequence" bun:"sequence"`
-	CreatedAt     time.Time `json:"created_at" bun:"created_at,nullzero,notnull,default:current_timestamp"`
+	Id            int        `json:"id" bun:"id,pk,autoincrement"`
+	Name          string     `json:"name" bun:"name"`
+	ParentId      int        `json:"parent_id" bun:"parent_id"`
+	StatusId      bool       `json:"status_id" bun:"status_id"`
+	Sequence      int        `json:"sequence" bun:"sequence"`
+	CreatedAt     time.Time  `json:"created_at" bun:"created_at,nullzero,notnull,default:current_timestamp"`
+	Children      []Category `json:"children" bun:"rel:has-many,join:id=parent_id"`
 
 	UpdatedAt bun.NullTime `json:"updated_at" bun:"updated_at"`
 	DeletedAt time.Time    `json:"-" bun:"deleted_at,soft_delete,nullzero"`

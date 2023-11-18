@@ -5,7 +5,8 @@ import "github.com/techno/entity"
 type CreateCategoryRequest struct {
 	Id       int    `json:"id" bun:"id,pk,autoincrement"`
 	Name     string `json:"name" validate:"required"`
-	ParentId int    `json:"parent_id" validate:"required"`
+	ParentId int    `json:"parent_id"`
+	Sequence int    `json:"sequence" validate:"required"`
 }
 
 func (input *CreateCategoryRequest) Validate() []FieldError {
@@ -30,4 +31,13 @@ type CategoryList struct {
 type CategoryParams struct {
 	StatusId int `query:"status_id"`
 	PaginationRequest
+}
+
+type CategoryTree struct {
+	Id           int    `json:"id"`
+	CategoryName string `json:"category_name"`
+	Children     string `json:"children"`
+}
+type CategoryTreeSequance struct {
+	Data []CategoryTree `json:"data"`
 }

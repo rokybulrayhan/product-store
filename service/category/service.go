@@ -34,6 +34,16 @@ type Repository interface {
 	List(ctx context.Context, pagination entity.Pagination, filter entity.CategoryFilter) (int, []entity.Category, error)
 	Create(ctx context.Context, entitys *entity.Category) error
 	Delete(ctx context.Context, id int) (int64, error)
+	ListAll(ctx context.Context) ([]entity.Category, error)
+}
+
+// Get entity
+func (s *Service) ListCategorySequence(ctx context.Context) ([]entity.Category, error) {
+	category, err := s.Repository.ListAll(ctx)
+	if err != nil {
+		return []entity.Category{}, apperror.InteralError.Wrap(err)
+	}
+	return category, nil
 }
 
 // Get entity
@@ -69,6 +79,7 @@ func (s *Service) Update(ctx context.Context, data httpentity.UpdateCategoryRequ
 		Id:       data.Id,
 		Name:     data.Name,
 		ParentId: data.ParentId,
+		Sequence: data.Sequence,
 		StatusId: data.StatusId,
 	}
 	affected, err := s.Repository.Update(ctx, &Category)
@@ -101,6 +112,7 @@ func (s *Service) Create(ctx context.Context, data httpentity.CreateCategoryRequ
 	Category = entity.Category{
 		Name:     data.Name,
 		ParentId: data.ParentId,
+		Sequence: data.Sequence,
 	}
 
 	err := s.Repository.Create(ctx, &Category)

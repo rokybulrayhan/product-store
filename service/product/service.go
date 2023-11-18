@@ -147,12 +147,12 @@ func (s *Service) Create(ctx context.Context, data httpentity.CreateProductReque
 		return nil, apperror.InteralError.Wrap(err)
 	}
 
-	//need transaction
-
 	if data.ProductStock.StockQuantity <= 0 {
 		return nil, QuantityError
 
 	}
+
+	//used transaction
 	err = s.ProductStockService.Repository.Create(ctx, &entity.ProductStock{
 		ProductId:     Product.Id,
 		StockQuantity: data.ProductStock.StockQuantity,

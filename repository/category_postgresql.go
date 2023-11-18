@@ -56,13 +56,29 @@ func (repo *CategoryRepo) List(ctx context.Context, pagination entity.Pagination
 			Offset(pagination.Offset)
 	}
 
-	//query.Where("contact_id = ?", filter.ContactID)
-
 	totalCount, err := query.ScanAndCount(ctx)
 	if err != nil {
 		return 0, nil, err
 	}
 	return totalCount, Category, nil
+}
+
+func (repo *CategoryRepo) ListAll(ctx context.Context) ([]entity.Category, error) {
+	Category := []entity.Category{}
+	query := repo.db.NewSelect().Model(&Category)
+	query.Where("parent_id = 0")
+
+	query.Relation("Children", func(q *bun.SelectQuery) *bun.SelectQuery {
+		return q
+
+	})
+	query.Order("sequence ASC")
+	err := query.Scan(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return Category, nil
+
 }
 
 // Create entity

@@ -30,7 +30,14 @@ func (h CategoryHandler) MapCategoryRoutes(CategoryGroup *echo.Group, authentica
 	CategoryGroup.GET("/:id", h.GetCategoryHandler)
 	CategoryGroup.GET("", h.ListCategoryHandler)
 	CategoryGroup.DELETE("/:id", h.Delete)
+	CategoryGroup.GET("/sequence", h.ListCategorySequenceHandler)
 
+}
+
+func (h *CategoryHandler) ListCategorySequenceHandler(c echo.Context) error {
+
+	res, err := h.Services.ListCategorySequence(c.Request().Context())
+	return handleApplicationResponse(c, "", res, err)
 }
 
 func (h *CategoryHandler) ListCategoryHandler(c echo.Context) error {
